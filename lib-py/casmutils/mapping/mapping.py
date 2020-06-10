@@ -1,6 +1,8 @@
 from . import _mapping
 from .structure import MappingReport
 from ..xtal import Structure
+from ..xtal import _xtal
+from ..xtal import symmetry
 
 
 def structure_score(mapping_data):
@@ -40,18 +42,21 @@ def map_structure(reference_struc, mapped_struc):
     ]
 
 
-def symmetry_preserving_mapping_report(mapping_report, factor_group, perm_rep_factor_group):
+def symmetry_preserving_mapping_report(mapping_report, structure, tol):
     """Returns the symmetry preserving mapping report
 
     Parameters
     ----------
     mapping_report : MappingReport
-    factor_group : list(cu.sym.CartOp)
-    perm_rep_factor_group : list(np.array)
+    structure : xtal.Structure
+    tol : float
 
     Returns
     -------
     MappingReport
 
     """
-    return _mapping.symmetry_preserving_mapping_report(mapping_report, factor_group, perm_rep_factor_group)
+    pybind_factor_group = _xtal.make_factor_group(structure._pybind_value, tol)
+    perm_rep_factor_group = symmetry.make_perm_rep_factor_group(structure, tol)
+
+    return MappingReport(_mapping.symmetry_preserving_mapping_report(mapping_report._pybind_value, pybind_factor_group, perm_rep_factor_group))

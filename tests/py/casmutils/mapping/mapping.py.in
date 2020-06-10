@@ -126,13 +126,34 @@ class MgGammaSurfaceMapTest(unittest.TestCase):
         map_to_hcp_super_with_sym = cu.mapping.structure.StructureMapper(
             hcp_super, k=0, use_crystal_symmetry=True, min_cost=1e-10)
 
-        self.assertEqual(3,len(map_to_hcp_super_with_sym(hcp_super)))
+        self.assertEqual(3, len(map_to_hcp_super_with_sym(hcp_super)))
 
         map_to_hcp_super_without_sym = cu.mapping.structure.StructureMapper(
             hcp_super, k=0, use_crystal_symmetry=False, min_cost=1e-10)
-        self.assertEqual(72,len(map_to_hcp_super_without_sym(hcp_super)))
+        self.assertEqual(72, len(map_to_hcp_super_without_sym(hcp_super)))
 
         return
+
+
+class SymPreservingMappingTest(unittest.TestCase):
+
+    def setUp(self):
+        self.parent_struc = cu.xtal.Structure.from_poscar(
+            os.path.join(input_filedir, "primitive_bcc_Ni.vasp"))
+        self.struc = cu.xtal.Structure.from_poscar(
+            os.path.join(input_filedir, "primitive_fcc_Ni.vasp"))
+
+    def test_sym_preserving_struc_score(self):
+        parent_struc_mapper = cu.mapping.structure.StructureMapper(
+            self.parent_struc, use_crystal_symmetry=True)
+        mapping_report = parent_struc_mapper(self.struc)
+
+        sym_break_only_mapping_report = cu.mapping.symmetry_preserving_mapping_report(
+            mapping_report[0], self.struc, 1e-8)
+        lattice_score, basis_score = cu.mapping.structure_score(
+            sym_break_only_mapping_report)
+        self.assertAlmostEqual(lattice_score, 0, delta=1e-8)
+        self.assertAlmostEqual(basis_score, 0, delta=1e-8)
 
 
 if __name__ == '__main__':
