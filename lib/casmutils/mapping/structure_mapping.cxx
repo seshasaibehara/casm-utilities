@@ -124,10 +124,11 @@ mapping::MappingReport symmetry_preserving_mapping_report(const mapping::Mapping
     {
         auto transformed_disp = group_as_operations[i].matrix * disp_matrix;
         Eigen::MatrixXd transformed_and_permuted_disp = transformed_disp;
+        transformed_and_permuted_disp.setZero();
         int ind = 0;
         for (const auto& j : group_as_permutations[i])
         {
-            transformed_and_permuted_disp.col(j) = transformed_disp.col(ind);
+            transformed_and_permuted_disp.col(j) += transformed_disp.col(ind);
             ind++;
         }
         symmetry_preserving_displacement += transformed_and_permuted_disp / group_as_operations.size();
