@@ -38,3 +38,20 @@ def map_structure(reference_struc, mapped_struc):
         MappingReport(r) for r in _mapping.map_structure(
             reference_struc._pybind_value, mapped_struc._pybind_value)
     ]
+
+
+def symmetry_preserving_mapping_report(mapping_report, factor_group, perm_rep_factor_group):
+    """Returns the symmetry preserving mapping report
+
+    Parameters
+    ----------
+    mapping_report : MappingReport
+    factor_group : list(cu.sym.CartOp)
+    perm_rep_factor_group : list(np.array)
+
+    Returns
+    -------
+    MappingReport
+
+    """
+    return _mapping.symmetry_preserving_mapping_report(mapping_report, factor_group, perm_rep_factor_group)
