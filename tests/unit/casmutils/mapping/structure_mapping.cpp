@@ -131,6 +131,7 @@ TEST_F(SymmetryPreservingMappingTest, PreservingTest)
     cu::mapping::MappingReport adjusted_report =
         cu::mapping::symmetry_preserving_mapping_report(full_report, hcp_group, perm_group);
     // because only difference is c/a ratio the mapping report should be entirely symmetry preserving
+
     EXPECT_TRUE(cu::is_equal(full_report.displacement, adjusted_report.displacement, 1e-5));
     EXPECT_TRUE(cu::is_equal(full_report.stretch, adjusted_report.stretch, 1e-5));
 }
