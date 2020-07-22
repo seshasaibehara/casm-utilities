@@ -73,5 +73,6 @@ PYBIND11_MODULE(_mapping, m)
     m.def("structure_score", &mapping::structure_score);
     m.def("map_structure", &mapping::map_structure);
     m.def("symmetry_preserving_mapping_report", &mapping::symmetry_preserving_mapping_report);
+    m.def("symmetry_breaking_mapping_report", &mapping::symmetry_breaking_mapping_report);
 }
 } // namespace wrappy

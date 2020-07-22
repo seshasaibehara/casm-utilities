@@ -148,25 +148,17 @@ class SymPreservingMappingTest(unittest.TestCase):
 
         map_to_tall_hcp = cu.mapping.map_structure(
             self.tall_hcp, self.squished_hcp)[0]
-        sym_preserving_map_to_tall_hcp = cu.mapping.symmetry_preserving_mapping_report(
-            map_to_tall_hcp, self.tall_hcp, 1e-8)
 
         lattice_deformation, basis_deformation = cu.mapping.structure_score(
             map_to_tall_hcp)
-        sym_preserving_lattice_deformation, sym_preserving_basis_deformation = cu.mapping.structure_score(
-            sym_preserving_map_to_tall_hcp)
 
-        sym_breaking_lattice_deformation = lattice_deformation - \
-            sym_preserving_lattice_deformation
-        sym_breaking_basis_deformation = basis_deformation - \
-            sym_preserving_basis_deformation
+        symmetry_breaking_report = cu.mapping.symmetry_breaking_mapping_report(
+            map_to_tall_hcp, self.tall_hcp, 1e-8)
+        sym_breaking_lattice_deformation, sym_breaking_basis_deformation = cu.mapping.structure_score(
+            symmetry_breaking_report)
 
         self.assertAlmostEqual(sym_breaking_lattice_deformation, 0, delta=1e-5)
         self.assertAlmostEqual(sym_breaking_basis_deformation, 0, delta=1e-5)
-        self.assertAlmostEqual(lattice_deformation,
-                               sym_preserving_lattice_deformation, delta=1e-5)
-        self.assertAlmostEqual(
-            basis_deformation, sym_preserving_basis_deformation, delta=1e-5)
 
     def test_sym_breaking(self):
         self.conventional_fcc_ni = cu.xtal.Structure.from_poscar(
@@ -177,23 +169,15 @@ class SymPreservingMappingTest(unittest.TestCase):
 
         map_to_conventional_fcc_ni = cu.mapping.map_structure(
             self.conventional_fcc_ni, self.partial_bain_ni)[0]
-        sym_preserving_map_to_conventional_fcc_ni = cu.mapping.symmetry_preserving_mapping_report(
-            map_to_conventional_fcc_ni, self.conventional_fcc_ni, 1e-8)
 
         lattice_deformation, basis_deformation = cu.mapping.structure_score(
             map_to_conventional_fcc_ni)
-        sym_preserving_lattice_deformation, sym_preserving_basis_deformation = cu.mapping.structure_score(
-            sym_preserving_map_to_conventional_fcc_ni)
 
-        sym_breaking_lattice_deformation = lattice_deformation - \
-            sym_preserving_lattice_deformation
-        sym_breaking_basis_deformation = basis_deformation - \
-            sym_preserving_basis_deformation
+        sym_breaking_report = cu.mapping.symmetry_breaking_mapping_report(
+            map_to_conventional_fcc_ni, self.conventional_fcc_ni, 1e-8)
+        sym_breaking_lattice_deformation, sym_breaking_basis_deformation = cu.mapping.structure_score(
+            sym_breaking_report)
 
-        self.assertAlmostEqual(
-            sym_preserving_lattice_deformation, 0, delta=1e-5)
-        self.assertAlmostEqual(
-            sym_preserving_basis_deformation, 0, delta=1e-5)
         self.assertAlmostEqual(
             lattice_deformation, sym_breaking_lattice_deformation, delta=1e-5)
         self.assertAlmostEqual(

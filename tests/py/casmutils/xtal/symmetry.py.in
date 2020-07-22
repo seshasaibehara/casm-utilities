@@ -37,7 +37,7 @@ class SymmetryGroupsTest(unittest.TestCase):
     def test_make_perm_rep_factor_group(self):
         prfg = cu.xtal.symmetry.make_perm_rep_factor_group(
             self.prim_fcc_ni, self.tol)
-        self.assertTrue(len(prfg), 48)
+        self.assertEqual(len(prfg), 48)
 
 
 class SymmetrizeTest(unittest.TestCase):

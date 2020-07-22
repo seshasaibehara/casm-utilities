@@ -183,6 +183,9 @@ mapping::MappingReport symmetry_preserving_mapping_report(const mapping::Mapping
                                                           const std::vector<sym::CartOp>& group_as_operations,
                                                           const std::vector<sym::PermRep>& group_as_permutations);
 
+mapping::MappingReport symmetry_breaking_mapping_report(const mapping::MappingReport& mapping_data,
+                                                        const std::vector<sym::CartOp>& group_as_operations,
+                                                        const std::vector<sym::PermRep>& group_as_permutations);
 } // namespace mapping
 } // namespace casmutils
 #endif

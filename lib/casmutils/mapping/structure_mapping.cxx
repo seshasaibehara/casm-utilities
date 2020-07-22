@@ -1,5 +1,6 @@
 #include "casmutils/sym/cartesian.hpp"
 #include <casm/crystallography/LatticeMap.hh>
+#include <casm/crystallography/Strain.hh>
 #include <casmutils/mapping/structure_mapping.hpp>
 #include <vector>
 
@@ -168,5 +169,34 @@ mapping::MappingReport symmetry_preserving_mapping_report(const mapping::Mapping
     new_report.displacement = symmetry_preserving_displacement;
     return new_report;
 }
+
+mapping::MappingReport symmetry_breaking_mapping_report(const mapping::MappingReport& mapping_data,
+                                                        const std::vector<sym::CartOp>& group_as_operations,
+                                                        const std::vector<sym::PermRep>& group_as_permutations)
+{
+
+    auto symmetry_preserving_report =
+        symmetry_preserving_mapping_report(mapping_data, group_as_operations, group_as_permutations);
+
+    auto symmetry_breaking_report = mapping_data;
+
+    // Writing out the symmetry breaking displacement
+    symmetry_breaking_report.displacement = mapping_data.displacement - symmetry_preserving_report.displacement;
+
+    // Writing out the symmetry breaking stretch
+    auto mapping_hencky_tensor =
+        CASM::strain::deformation_tensor_to_metric<CASM::strain::METRIC::HENCKY>(mapping_data.stretch.inverse());
+
+    auto sym_preserving_hencky = CASM::strain::deformation_tensor_to_metric<CASM::strain::METRIC::HENCKY>(
+        symmetry_preserving_report.stretch.inverse());
+
+    auto sym_breaking_hencky_tensor = mapping_hencky_tensor - sym_preserving_hencky;
+    auto sym_breaking_right_stretch =
+        CASM::strain::metric_to_deformation_tensor<CASM::strain::METRIC::HENCKY>(sym_breaking_hencky_tensor);
+
+    symmetry_breaking_report.stretch = sym_breaking_right_stretch.inverse();
+    return symmetry_breaking_report;
+}
+
 } // namespace mapping
 } // namespace casmutils

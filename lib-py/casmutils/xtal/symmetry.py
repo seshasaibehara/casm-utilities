@@ -73,14 +73,15 @@ def make_perm_rep_factor_group(structure, tol):
 
         for i in range(0, len(basis_sites)):
             for j in range(0, len(transformed_sites)):
-                if basis_sites[i] == transformed_sites[j]:
+                basis_site = Site(Coordinate(basis_sites[i].cart()).bring_within(
+                    structure.lattice()), basis_sites[i].label())
+                if basis_site == transformed_sites[j]:
                     perm_rep_sym_op[i] = j
                     break
                 if j == len(transformed_sites)-1:
                     raise Exception(
                         "Oopsie! No permutation represention found. Check the sym_op and structure again")
         perm_rep_factor_group.append(perm_rep_sym_op)
-
     return perm_rep_factor_group
 
 
