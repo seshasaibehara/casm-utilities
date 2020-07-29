@@ -3,15 +3,25 @@ check_PROGRAMS += check_stage
 check_stage_SOURCES = tests/unit/casmutils/stage.cpp
 check_stage_LDADD=\
 					libgtest.la\
-					libcasmutils.la
-
+					libcasmutils.la\
+						$(BOOST_SYSTEM_LIB)\
+                 		$(BOOST_FILESYSTEM_LIB)\
+                 		$(BOOST_CHRONO_LIB)\
+                 		$(BOOST_REGEX_LIB)\
+                 		$(BOOST_PROGRAM_OPTIONS_LIB)
 TESTS+=check_meta
 check_PROGRAMS += check_meta
 check_meta_SOURCES = tests/unit/casmutils/meta.cpp
 check_meta_LDADD=\
 					libgtest.la\
-					libcasmutils.la
+					libcasmutils.la\
+						$(BOOST_SYSTEM_LIB)\
+                 		$(BOOST_FILESYSTEM_LIB)\
+                 		$(BOOST_CHRONO_LIB)\
+                 		$(BOOST_REGEX_LIB)\
+                 		$(BOOST_PROGRAM_OPTIONS_LIB)
 
 include tests/unit/casmutils/xtal/Makemodule.am
 include tests/unit/casmutils/sym/Makemodule.am
 include tests/unit/casmutils/mapping/Makemodule.am
+include tests/unit/casmutils/strain/Makemodule.am
