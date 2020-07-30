@@ -990,3 +990,9 @@ libcasmblob_la_SOURCES = \
     CASMcode/src/casm/system/Popen.cc\
     CASMcode/src/casm/system/RuntimeLibrary.cc\
     CASMcode/src/casm/version/autoversion.cc
+libcasmblob_la_LIBADD=\
+                 $(BOOST_SYSTEM_LIB)\
+                 $(BOOST_FILESYSTEM_LIB)\
+                 $(BOOST_CHRONO_LIB)\
+                 $(BOOST_REGEX_LIB)\
+                 $(BOOST_PROGRAM_OPTIONS_LIB)

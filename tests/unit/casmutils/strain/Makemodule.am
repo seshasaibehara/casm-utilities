@@ -3,5 +3,9 @@ check_PROGRAMS += check_strain_strain_enum
 check_strain_strain_enum_SOURCES = tests/unit/casmutils/strain/strain_enum.cpp
 check_strain_strain_enum_LDADD=\
 					libgtest.la\
-					libcasmutils.la
-
+					libcasmutils.la\
+						$(BOOST_SYSTEM_LIB)\
+                 		$(BOOST_FILESYSTEM_LIB)\
+                 		$(BOOST_CHRONO_LIB)\
+                 		$(BOOST_REGEX_LIB)\
+                 		$(BOOST_PROGRAM_OPTIONS_LIB)

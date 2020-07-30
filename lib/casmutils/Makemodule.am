@@ -19,6 +19,7 @@ libcasmutils_la_LIBADD=\
 					   libcasmutils-sym.la\
 					   libcasmutils-mapping.la\
 					   libcasmutils-xtal.la\
+					   libcasmutils-strain.la\
 						$(BOOST_SYSTEM_LIB)\
                  		$(BOOST_FILESYSTEM_LIB)\
                  		$(BOOST_CHRONO_LIB)\

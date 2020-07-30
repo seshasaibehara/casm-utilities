@@ -24,11 +24,13 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
     // Set strain dof for BasicStructure obtained from input_struc
     std::map<std::string, CASM::xtal::DoFSet> strain_dof;
     strain_dof.emplace(input_options.strain_metric, CASM::AnisoValTraits::strain(input_options.strain_metric));
-    casm_basic_struc.set_global_dofs(strain_dof);
 
+    casm_basic_struc.set_global_dofs(strain_dof);
     // Make Primclex from BasicStructure
+
     std::shared_ptr<CASM::Structure> casm_struc_ptr;
     casm_struc_ptr.reset(new CASM::Structure(casm_basic_struc));
+
     CASM::ProjectSettings project_settings("project");
     CASM::PrimClex primclex(project_settings, casm_struc_ptr);
 
@@ -37,15 +39,15 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
     primclex.db<CASM::Supercell>().insert(super_cell);
 
     // Now make a configuration from the supercell created and stuff it in primclex
+
     CASM::Configuration super_cell_conf(super_cell);
     primclex.db<CASM::Configuration>().insert(super_cell_conf);
 
     // Now make a ConfigEnumInput object from the configuration created
-    CASM::ConfigEnumInput enum_input_conf(super_cell_conf);
+    CASM::ConfigEnumInput enum_input_conf(super_cell);
 
     // TODO: This is an empty filter expression. In future maybe it can be a part of input arguments
     std::vector<std::string> filter_expr;
-
     // Enumerating by calling the run in casm
     CASM::ConfigEnumStrain::run(primclex,
                                 enum_input_conf,
