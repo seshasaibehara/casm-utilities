@@ -36,38 +36,38 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
 
     // Make a supercell object of size 1 and stuff it in primclex
     CASM::Supercell super_cell(&primclex, Eigen::Matrix3i::Identity());
-    primclex.db<CASM::Supercell>().insert(super_cell);
+    //    primclex.db<CASM::Supercell>().insert(super_cell);
 
     // Now make a configuration from the supercell created and stuff it in primclex
 
-    CASM::Configuration super_cell_conf(super_cell);
-    primclex.db<CASM::Configuration>().insert(super_cell_conf);
+    //    CASM::Configuration super_cell_conf(super_cell);
+    //    primclex.db<CASM::Configuration>().insert(super_cell_conf);
 
     // Now make a ConfigEnumInput object from the configuration created
+    std::cout << "here" << std::endl;
     CASM::ConfigEnumInput enum_input_conf(super_cell);
+    std::cout << "here1" << std::endl;
 
     // TODO: This is an empty filter expression. In future maybe it can be a part of input arguments
     std::vector<std::string> filter_expr;
     // Enumerating by calling the run in casm
-    CASM::ConfigEnumStrain::run(primclex,
-                                enum_input_conf,
-                                input_options.axes,
-                                input_options.min_val,
-                                input_options.max_val,
-                                input_options.inc_val,
-                                input_options.sym_axes,
-                                input_options.auto_range,
-                                input_options.trim_corners,
-                                filter_expr,
-                                input_options.dry_run);
-
-    // Assuming that now primclex got stuffed with the enumerated configs need a way to extract them out.
-    auto& config_db = primclex.db<CASM::Configuration>();
+    std::vector<CASM::Configuration> strained_configs =
+        CASM::ConfigEnumStrain::run_without_inserting_configs(primclex.prim(),
+                                                              enum_input_conf,
+                                                              input_options.axes,
+                                                              input_options.min_val,
+                                                              input_options.max_val,
+                                                              input_options.inc_val,
+                                                              input_options.sym_axes,
+                                                              input_options.auto_range,
+                                                              input_options.trim_corners,
+                                                              filter_expr,
+                                                              input_options.dry_run);
 
     // Once you have the config database, get the structure and config.json string
     std::vector<std::pair<std::string, xtal::Structure>> enumerated_structures;
 
-    for (auto& config : config_db)
+    for (auto& config : strained_configs)
     {
         enumerated_structures.emplace_back(
             std::make_pair(CASM::config_json_string(config), xtal::Structure(CASM::make_simple_structure(config))));
