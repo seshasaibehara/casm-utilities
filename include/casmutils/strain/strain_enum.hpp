@@ -10,6 +10,7 @@ namespace strain
 {
 
 // TODO: Explain options and what it does
+// TODO: sym_axes false seg faults, even in CLI. CASM issue
 struct StrainEnumOptions
 {
 public:
@@ -20,9 +21,8 @@ public:
           inc_val(inc_val),
           auto_range(false),
           trim_corners(true),
-          sym_axes(false),
-          dry_run(false),
-          strain_metric("H")
+          sym_axes(true),
+          strain_metric("Hstrain")
     {
     }
 
@@ -34,10 +34,8 @@ public:
     bool auto_range;
     bool trim_corners;
     bool sym_axes;
-    bool dry_run;
 };
 
-// Currently the return type is void, need to deduce it later
 std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Structure& input_struc,
                                                                       StrainEnumOptions& input_options);
 
