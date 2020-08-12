@@ -19,6 +19,25 @@ namespace casmutils
 {
 namespace strain
 {
+// A function which tells whether a configuration exists in the given vector of configurations
+// Makes use of ConfigIsEquivalent class to compare configuration
+// This function can be used to get unique configurations from a list of configurations
+bool find_if_config_exists(CASM::Configuration& config, std::vector<CASM::Configuration>& configs)
+{
+
+    CASM::ConfigIsEquivalent config_comparator(config, 1e-5);
+    auto it = std::find_if(configs.begin(), configs.end(), [&](const CASM::Configuration& other_config) {
+        return config_comparator(other_config);
+    });
+
+    if (it == configs.end())
+    {
+        return false;
+    }
+
+    return true;
+}
+
 std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Structure& input_struc,
                                                                       StrainEnumOptions& input_options)
 {
@@ -57,26 +76,15 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
                                                               input_options.trim_corners,
                                                               filter_expr);
 
-    // Get canonical configs from strained_configs
-    std::vector<CASM::Configuration> canonical_configs;
+    // Find unique configs from the strained configs
+    // The configs need to be in canonical form to compare
+    std::vector<CASM::Configuration> unique_configs;
     for (const auto& config : strained_configs)
     {
-        canonical_configs.push_back(config.canonical_form());
-    }
-
-    // Find unique configs from canonical configs
-    std::vector<CASM::Configuration> unique_configs;
-    for (const auto& config : canonical_configs)
-    {
-        CASM::ConfigIsEquivalent config_comparator(config, 1e-8);
-        auto it =
-            std::find_if(unique_configs.begin(), unique_configs.end(), [&](const CASM::Configuration& _other_config) {
-                return config_comparator(_other_config);
-            });
-
-        if (it == unique_configs.end())
+        CASM::Configuration canonical_config = config.canonical_form();
+        if (casmutils::strain::find_if_config_exists(canonical_config, unique_configs) == false)
         {
-            unique_configs.push_back(config);
+            unique_configs.push_back(canonical_config);
         }
     }
 
@@ -84,13 +92,10 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
     std::vector<std::pair<std::string, xtal::Structure>> enumerated_structures;
     for (const auto& config : unique_configs)
     {
-        std::cout << CASM::config_json_string(config) << std::endl;
-        std::cout << "--------------" << std::endl;
         enumerated_structures.emplace_back(
             std::make_pair(CASM::config_json_string(config), xtal::Structure(CASM::make_simple_structure(config))));
     }
 
-    std::cout << enumerated_structures.size() << std::endl;
     return enumerated_structures;
 }
 } // namespace strain

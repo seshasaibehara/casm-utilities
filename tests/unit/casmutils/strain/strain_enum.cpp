@@ -25,10 +25,6 @@ TEST_F(StrainTest, enumeration)
 
     cu::strain::StrainEnumOptions input_options(max_val, inc_val);
     input_options.min_val = min_val;
-    std::cout << input_options.max_val << std::endl;
-    std::cout << input_options.inc_val << std::endl;
-    std::cout << input_options.min_val << std::endl;
-    std::cout << input_options.sym_axes << std::endl;
     std::vector<std::pair<std::string, Structure>> enumerated_structures =
         cu::strain::enumerate_strain(test_struc, input_options);
     EXPECT_EQ(enumerated_structures.size(), 196);
