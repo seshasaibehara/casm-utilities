@@ -16,7 +16,7 @@ protected:
 TEST_F(StrainTest, enumeration)
 {
 
-    cu::fs::path strain_input_path(cu::autotools::input_filesdir / "strain_test.vasp");
+    cu::fs::path strain_input_path(cu::autotools::input_filesdir / "BCC_Mo.vasp");
     cu::xtal::Structure test_struc = cu::xtal::Structure::from_poscar(strain_input_path);
     Eigen::VectorXd inc_val(6), max_val(6), min_val(6);
     inc_val << 0.05, 0.05, 0.05, 0.05, 0.05, 0.05;
