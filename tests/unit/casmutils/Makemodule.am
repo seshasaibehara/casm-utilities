@@ -14,4 +14,4 @@ check_meta_LDADD=\
 include tests/unit/casmutils/xtal/Makemodule.am
 include tests/unit/casmutils/sym/Makemodule.am
 include tests/unit/casmutils/mapping/Makemodule.am
-include tests/unit/casmutils/strain/Makemodule.am
+include tests/unit/casmutils/enum/Makemodule.am

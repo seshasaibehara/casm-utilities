@@ -1,0 +1,10 @@
+noinst_LTLIBRARIES += libcasmutils-enum.la
+
+libcasmutils_enum_la_SOURCES=
+libcasmutils_enum_la_SOURCES+=\
+						 lib/casmutils/enum/strain_enum.cxx\
+						 lib/casmutils/enum/sitedofs_enum.cxx\
+						 lib/casmutils/enum/misc.cxx\
+						 include/casmutils/enum/strain_enum.hpp\
+						 include/casmutils/enum/sitedofs_enum.hpp\
+						 include/casmutils/enum/misc.hpp

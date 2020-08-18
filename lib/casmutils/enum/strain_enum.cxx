@@ -1,43 +1,23 @@
 #include <casm/app/ClexDescription.hh>
 #include <casm/app/ProjectSettings.hh>
-#include <casm/clex/ConfigIsEquivalent.hh>
+#include <casm/casm_io/json/jsonParser.hh>
 #include <casm/clex/Configuration.hh>
 #include <casm/clex/PrimClex.hh>
 #include <casm/clex/SimpleStructureTools.hh>
 #include <casm/clex/Supercell.hh>
 #include <casm/crystallography/AnisoValTraits.hh>
 #include <casm/crystallography/Structure.hh>
-#include <casm/database/ConfigDatabase.hh>
-#include <casm/database/ScelDatabase.hh>
+#include <casm/enumerator/DoFSpace.hh>
 #include <casm/enumerator/Enumerator.hh>
 #include <casm/symmetry/SymRepTools.hh>
-#include <casmutils/strain/strain_enum.hpp>
-#include <map>
-#include <vector>
+#include <casm/symmetry/io/json/SymRepTools.hh>
+#include <casmutils/enum/misc.hpp>
+#include <casmutils/enum/strain_enum.hpp>
 
 namespace casmutils
 {
-namespace strain
+namespace enumerator
 {
-// A function which tells whether a configuration exists in the given vector of configurations
-// Makes use of ConfigIsEquivalent class to compare configuration
-// This function can be used to get unique configurations from a list of configurations
-bool find_if_config_exists(CASM::Configuration& config, std::vector<CASM::Configuration>& configs)
-{
-
-    CASM::ConfigIsEquivalent config_comparator(config, 1e-5);
-    auto it = std::find_if(configs.begin(), configs.end(), [&](const CASM::Configuration& other_config) {
-        return config_comparator(other_config);
-    });
-
-    if (it == configs.end())
-    {
-        return false;
-    }
-
-    return true;
-}
-
 std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Structure& input_struc,
                                                                       StrainEnumOptions& input_options)
 {
@@ -52,41 +32,60 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
     std::shared_ptr<CASM::Structure> casm_struc_ptr;
     casm_struc_ptr.reset(new CASM::Structure(casm_basic_struc));
 
-    // Make Primclex from BasicStructure
+    // Make Primclex from structure pointer
     CASM::ProjectSettings project_settings("project");
     CASM::ClexDescription clex_name;
     project_settings.set_default_clex(clex_name);
     CASM::PrimClex primclex(project_settings, casm_struc_ptr);
     CASM::AnisoValTraits{"occ", {}, CASM::AnisoValTraits::LOCAL};
 
+    // Make supercell from primclex and input configuration from supercell
     CASM::Supercell super_cell(&primclex, Eigen::Matrix3i::Identity());
-    CASM::ConfigEnumInput enum_input_conf(super_cell);
+    CASM::ConfigEnumInput input_config(super_cell);
+
+    // Printing strain symmetry analysis
+    // TODO: Need to move this out somewhere so that symmetry analysis can be printed out for any structure
+    CASM::DoFSpace dof_space(input_config, input_options.strain_metric);
+    CASM::jsonParser sym_report;
+    sym_report = CASM::vector_space_sym_report(dof_space, input_options.sym_axes);
+    std::filesystem::path current_path = std::filesystem::current_path();
+    std::string file_name = current_path.string() + "/strain_sym_analysis.json";
+    sym_report.write(file_name);
+    //    sym_report.print(std::cout);
 
     // TODO: This is an empty filter expression. In future maybe it can be a part of input arguments
     std::vector<std::string> filter_expr;
+
+    // Setting auto_range based on whether min_val is provided or not
+    // If min_val is provided, it is false else it is the same as sym_axes
+    // Logic taken from how it works in CASM. See ConfigEnumStrain.cc.
+    bool auto_range = false;
+    if (input_options.min_val.isZero() == true)
+    {
+        auto_range = input_options.sym_axes;
+    }
+
     CASM::ConfigEnumStrain strained_configs =
         CASM::ConfigEnumStrain::run_without_inserting_configs(primclex,
-                                                              enum_input_conf,
+                                                              input_config,
                                                               input_options.axes,
                                                               input_options.min_val,
                                                               input_options.max_val,
                                                               input_options.inc_val,
                                                               input_options.sym_axes,
-                                                              input_options.auto_range,
+                                                              auto_range,
                                                               input_options.trim_corners,
                                                               filter_expr);
 
-    // Find unique configs from the strained configs
-    // The configs need to be in canonical form to compare
-    std::vector<CASM::Configuration> unique_configs;
+    // Get configurations from ConfigEnumStrain object
+    std::vector<CASM::Configuration> configs;
     for (const auto& config : strained_configs)
     {
-        CASM::Configuration canonical_config = config.canonical_form();
-        if (casmutils::strain::find_if_config_exists(canonical_config, unique_configs) == false)
-        {
-            unique_configs.push_back(canonical_config);
-        }
+        configs.push_back(config);
     }
+
+    // Find unique configs from the strained configs
+    std::vector<CASM::Configuration> unique_configs = extend::get_unique_configurations(configs);
 
     // Make casmutilities structure from unique configs
     std::vector<std::pair<std::string, xtal::Structure>> enumerated_structures;
@@ -98,5 +97,5 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
 
     return enumerated_structures;
 }
-} // namespace strain
+} // namespace enumerator
 } // namespace casmutils
