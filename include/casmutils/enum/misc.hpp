@@ -1,4 +1,3 @@
-#include <casm/clex/ConfigIsEquivalent.hh>
 #include <casm/clex/Configuration.hh>
 #include <vector>
 

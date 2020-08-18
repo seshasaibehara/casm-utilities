@@ -1,3 +1,4 @@
+#include <casm/clex/ConfigIsEquivalent.hh>
 #include <casmutils/enum/misc.hpp>
 
 namespace extend
