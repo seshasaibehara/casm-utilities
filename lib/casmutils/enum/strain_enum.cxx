@@ -68,7 +68,7 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_strain(xtal::Stru
     CASM::ConfigEnumStrain strained_configs =
         CASM::ConfigEnumStrain::run_without_inserting_configs(primclex,
                                                               input_config,
-                                                              input_options.axes,
+                                                              input_options.axes.transpose(),
                                                               input_options.min_val,
                                                               input_options.max_val,
                                                               input_options.inc_val,

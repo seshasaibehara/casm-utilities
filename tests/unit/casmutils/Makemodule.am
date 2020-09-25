@@ -1,17 +1,17 @@
-TESTS+=check_stage
-check_PROGRAMS += check_stage
-check_stage_SOURCES = tests/unit/casmutils/stage.cpp
-check_stage_LDADD=\
-					libgtest.la\
-					libcasmutils.la
-TESTS+=check_meta
-check_PROGRAMS += check_meta
-check_meta_SOURCES = tests/unit/casmutils/meta.cpp
-check_meta_LDADD=\
-					libgtest.la\
-					libcasmutils.la
+#TESTS+=check_stage
+#check_PROGRAMS += check_stage
+#check_stage_SOURCES = tests/unit/casmutils/stage.cpp
+#check_stage_LDADD=\
+#					libgtest.la\
+#					libcasmutils.la
+#TESTS+=check_meta
+#check_PROGRAMS += check_meta
+#check_meta_SOURCES = tests/unit/casmutils/meta.cpp
+#check_meta_LDADD=\
+#					libgtest.la\
+#					libcasmutils.la
 
-include tests/unit/casmutils/xtal/Makemodule.am
-include tests/unit/casmutils/sym/Makemodule.am
-include tests/unit/casmutils/mapping/Makemodule.am
+#include tests/unit/casmutils/xtal/Makemodule.am
+#include tests/unit/casmutils/sym/Makemodule.am
+#include tests/unit/casmutils/mapping/Makemodule.am
 include tests/unit/casmutils/enum/Makemodule.am

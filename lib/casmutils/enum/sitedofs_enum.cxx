@@ -1,11 +1,15 @@
 #include <casm/app/ClexDescription.hh>
 #include <casm/app/ProjectSettings.hh>
+#include <casm/casm_io/json/jsonParser.hh>
 #include <casm/clex/PrimClex.hh>
 #include <casm/clex/SimpleStructureTools.hh>
 #include <casm/clex/Supercell.hh>
 #include <casm/crystallography/AnisoValTraits.hh>
 #include <casm/crystallography/Structure.hh>
+#include <casm/enumerator/DoFSpace.hh>
 #include <casm/enumerator/Enumerator.hh>
+#include <casm/symmetry/SymRepTools.hh>
+#include <casm/symmetry/io/json/SymRepTools.hh>
 #include <casmutils/enum/misc.hpp>
 #include <casmutils/enum/sitedofs_enum.hpp>
 
@@ -41,13 +45,20 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_sitedofs(xtal::St
     CASM::Supercell super_cell(&primclex, Eigen::Matrix3i::Identity());
     CASM::ConfigEnumInput input_config(super_cell);
 
-    std::vector<std::string> filter_expr;
+    CASM::DoFSpace dof_space(input_config, input_options.dof);
+    CASM::jsonParser sym_report;
+    bool calc_wedges = false;
+    sym_report = CASM::vector_space_sym_report(dof_space, calc_wedges);
+    std::filesystem::path current_path = std::filesystem::current_path();
+    std::string file_name = current_path.string() + "/dof_sym_analyis.json";
+    sym_report.write(file_name);
 
+    std::vector<std::string> filter_expr;
     CASM::ConfigEnumSiteDoFs enum_configs =
         CASM::ConfigEnumSiteDoFs::run_without_inserting_configs(primclex,
                                                                 input_config,
                                                                 input_options.dof,
-                                                                input_options.axes,
+                                                                input_options.axes.transpose(),
                                                                 input_options.min_val,
                                                                 input_options.max_val,
                                                                 input_options.inc_val,
@@ -70,6 +81,8 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_sitedofs(xtal::St
     std::vector<std::pair<std::string, xtal::Structure>> enumerated_structures;
     for (const auto& config : unique_configs)
     {
+        std::cout << CASM::config_json_string(config) << std::endl;
+        std::cout << "-------------" << std::endl;
         enumerated_structures.emplace_back(
             std::make_pair(CASM::config_json_string(config), xtal::Structure(CASM::make_simple_structure(config))));
     }
