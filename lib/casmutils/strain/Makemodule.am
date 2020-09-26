@@ -1,0 +1,6 @@
+noinst_LTLIBRARIES += libcasmutils-strain.la
+
+libcasmutils_strain_la_SOURCES=
+libcasmutils_strain_la_SOURCES+=\
+						 lib/casmutils/strain/strain.cxx\
+						 include/casmutils/strain/strain.hpp

@@ -1,3 +1,5 @@
-include tests/py/casmutils/mapping/Makemodule.am
-include tests/py/casmutils/sym/Makemodule.am
-include tests/py/casmutils/xtal/Makemodule.am
+#include tests/py/casmutils/mapping/Makemodule.am
+#include tests/py/casmutils/sym/Makemodule.am
+#include tests/py/casmutils/xtal/Makemodule.am
+include tests/py/casmutils/enum/Makemodule.am
+

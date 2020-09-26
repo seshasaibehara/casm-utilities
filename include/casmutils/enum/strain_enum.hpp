@@ -16,7 +16,7 @@ namespace enumerator
 struct StrainEnumOptions
 {
 public:
-    StrainEnumOptions(Eigen::VectorXd& max_val, Eigen::VectorXd& inc_val)
+    StrainEnumOptions(const Eigen::VectorXd& max_val, const Eigen::VectorXd& inc_val)
         : axes(Eigen::MatrixXd::Identity(max_val.rows(), max_val.rows())),
           min_val(Eigen::VectorXd::Zero(max_val.rows())),
           max_val(max_val),
