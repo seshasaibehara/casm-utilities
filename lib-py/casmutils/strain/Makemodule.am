@@ -1,0 +1,10 @@
+strainpydir=$(pythondir)/casmutils/strain
+
+strainpy_PYTHON=\
+			  lib-py/casmutils/strain/__init__.py\
+			  lib-py/casmutils/strain/strain.py
+
+strainpy_LTLIBRARIES=\
+				   _strain.la
+
+include lib-py/casmutils/strain/_strain/Makemodule.am

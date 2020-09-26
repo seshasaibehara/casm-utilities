@@ -1,0 +1,23 @@
+TESTS+=check_enum_strain_enum
+check_PROGRAMS += check_enum_strain_enum
+check_enum_strain_enum_SOURCES = tests/unit/casmutils/enum/strain_enum.cpp
+check_enum_strain_enum_LDADD=\
+					libgtest.la\
+					libcasmutils.la\
+						$(BOOST_SYSTEM_LIB)\
+                 		$(BOOST_FILESYSTEM_LIB)\
+                 		$(BOOST_CHRONO_LIB)\
+                 		$(BOOST_REGEX_LIB)\
+                 		$(BOOST_PROGRAM_OPTIONS_LIB)
+
+TESTS+=check_enum_sitedofs_enum
+check_PROGRAMS += check_enum_sitedofs_enum
+check_enum_sitedofs_enum_SOURCES = tests/unit/casmutils/enum/sitedofs_enum.cpp
+check_enum_sitedofs_enum_LDADD=\
+					libgtest.la\
+					libcasmutils.la\
+						$(BOOST_SYSTEM_LIB)\
+                 		$(BOOST_FILESYSTEM_LIB)\
+                 		$(BOOST_CHRONO_LIB)\
+                 		$(BOOST_REGEX_LIB)\
+                 		$(BOOST_PROGRAM_OPTIONS_LIB)

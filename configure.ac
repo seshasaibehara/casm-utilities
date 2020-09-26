@@ -72,10 +72,22 @@ AC_CONFIG_FILES([tests/py/casmutils/mapping/mapping.py],[chmod +x tests/py/casmu
 AC_CONFIG_FILES([tests/py/casmutils/mapping/structure.py],[chmod +x tests/py/casmutils/mapping/structure.py])
 AC_CONFIG_FILES([tests/py/casmutils/sym/cart.py],[chmod +x tests/py/casmutils/sym/cart.py])
 AC_CONFIG_FILES([tests/py/casmutils/xtal/symmetry.py],[chmod +x tests/py/casmutils/xtal/symmetry.py])
+AC_CONFIG_FILES([tests/py/casmutils/enum/enumerator.py],[chmod +x tests/py/casmutils/enum/enumerator.py])
+AC_CONFIG_FILES([tests/py/casmutils/strain/strain.py],[chmod +x tests/py/casmutils/strain/strain.py])
 
 AC_CONFIG_FILES([tests/integration/phony_module_installation.sh])
 AC_CONFIG_FILES([tests/integration/cu-import.py],[chmod +x tests/integration/cu-import.py])
 ####################################################################################
 
+# Checks for libraries.                                                                       
+BOOSTV=1.52                                                                                   
+AX_BOOST_BASE([$BOOSTV],[],[AC_MSG_ERROR(You need Boost $BOOSTV libraries or higher.)])       
+AX_BOOST_SYSTEM                                                                               
+AX_BOOST_FILESYSTEM                                                                           
+AX_BOOST_PROGRAM_OPTIONS                                                                      
+                                                                                              
+#If you're compiling casm for them, you need these also                                       
+AX_BOOST_CHRONO                                                                               
+AX_BOOST_REGEX  
 
 AC_OUTPUT

@@ -1,0 +1,24 @@
+#!@PYTHON@
+
+import unittest
+import casmutils as cu
+import numpy as np
+
+
+class StrainTest(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_strain_conversions(self):
+        deformation_tensor = np.array([[0.5, 0.2, 0.3], [0.2, 0.3, 0.6],
+                                       [0.3, 0.6, 0.1]])
+        cu.strain.test()
+        print(dir(cu.mapping._mapping))
+        strain_metric = cu.strain._strain.tds("h", deformation_tensor)
+        print(strain_metric)
+        print("im here")
+        self.assertTrue(True)
+
+
+if __name__ == '__main__':
+    unittest.main()

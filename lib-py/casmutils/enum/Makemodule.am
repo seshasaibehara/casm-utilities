@@ -1,0 +1,10 @@
+enumpydir=$(pythondir)/casmutils/enum
+
+enumpy_PYTHON=\
+			  lib-py/casmutils/enum/__init__.py\
+			  lib-py/casmutils/enum/enum.py
+
+enumpy_LTLIBRARIES=\
+				   _enum.la
+
+include lib-py/casmutils/enum/_enum/Makemodule.am

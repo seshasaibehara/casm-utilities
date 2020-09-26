@@ -1,6 +1,8 @@
 include lib/casmutils/xtal/Makemodule.am
 include lib/casmutils/sym/Makemodule.am
 include lib/casmutils/mapping/Makemodule.am
+include lib/casmutils/enum/Makemodule.am
+include lib/casmutils/strain/Makemodule.am
 
 lib_LTLIBRARIES += libcasmutils.la
 
@@ -17,4 +19,11 @@ libcasmutils_la_LIBADD=\
 					   libcasmblob.la\
 					   libcasmutils-sym.la\
 					   libcasmutils-mapping.la\
-					   libcasmutils-xtal.la
+					   libcasmutils-xtal.la\
+					   libcasmutils-enum.la\
+					   libcasmutils-strain.la\
+						$(BOOST_SYSTEM_LIB)\
+                 		$(BOOST_FILESYSTEM_LIB)\
+                 		$(BOOST_CHRONO_LIB)\
+                 		$(BOOST_REGEX_LIB)\
+                 		$(BOOST_PROGRAM_OPTIONS_LIB)

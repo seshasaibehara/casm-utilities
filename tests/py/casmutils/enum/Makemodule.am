@@ -1,0 +1,2 @@
+TESTS += \
+		 tests/py/casmutils/enum/enumerator.py

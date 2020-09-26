@@ -1,0 +1,17 @@
+#!@PYTHON@
+
+import unittest
+import casmutils as cu
+
+
+class SymmetryGroupsTest(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_make_point_group(self):
+        cu.strain.test()
+        cu.enum.test()
+
+
+if __name__ == '__main__':
+    unittest.main()
