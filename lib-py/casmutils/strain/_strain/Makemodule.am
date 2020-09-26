@@ -1,0 +1,9 @@
+_strain_la_SOURCES=\
+				lib-py/casmutils/strain/_strain/strain-py.cxx
+
+_strain_la_LIBADD=\
+				libcasmutils.la
+
+_strain_la_LDFLAGS=\
+				 -module
+

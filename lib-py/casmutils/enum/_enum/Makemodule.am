@@ -1,0 +1,9 @@
+_enum_la_SOURCES=\
+				lib-py/casmutils/enum/_enum/enum-py.cxx
+
+_enum_la_LIBADD=\
+				libcasmutils.la
+
+_enum_la_LDFLAGS=\
+				 -module
+
