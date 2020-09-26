@@ -1,0 +1,7 @@
+TESTS+=check_strain_strain
+check_PROGRAMS += check_strain_strain
+check_strain_strain_SOURCES = tests/unit/casmutils/strain/strain.cpp
+check_strain_strain_LDADD=\
+					libgtest.la\
+					libcasmutils.la
+
