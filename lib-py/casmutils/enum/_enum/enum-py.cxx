@@ -25,7 +25,7 @@ PYBIND11_MODULE(_enum, m)
 
     {
         class_<enumerator::StrainEnumOptions>(m, "StrainEnumOptions")
-            .def(init<const Eigen::VectorXd&, const Eigen::VectorXd&>())
+            .def(init<const int&, const Eigen::VectorXd&, const Eigen::VectorXd&>())
             .def_readwrite("strain_metric", &enumerator::StrainEnumOptions::strain_metric)
             .def_readwrite("axes", &enumerator::StrainEnumOptions::axes)
             .def_readwrite("min_val", &enumerator::StrainEnumOptions::min_val)

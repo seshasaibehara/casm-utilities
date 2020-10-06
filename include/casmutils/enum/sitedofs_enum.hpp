@@ -11,15 +11,19 @@ namespace enumerator
 struct SiteDoFEnumOptions
 {
 public:
-    SiteDoFEnumOptions(std::string& dof, Eigen::VectorXd& max_val, Eigen::VectorXd& inc_val)
+    SiteDoFEnumOptions(const std::string& dof,
+                       const int& tot_dim,
+                       const Eigen::VectorXd& max_val,
+                       const Eigen::VectorXd& inc_val)
         : dof(dof),
-          axes(Eigen::MatrixXd::Identity(max_val.rows(), max_val.rows())),
+          axes(Eigen::MatrixXd::Identity(tot_dim, tot_dim)),
           inc_val(inc_val),
           max_val(max_val),
           min_val(Eigen::VectorXd::Zero(max_val.rows())),
           sym_axes(false),
           min_nonzero(0),
-          max_nonzero(max_val.rows())
+          max_nonzero(max_val.rows()),
+          trans_modes(true)
     {
     }
 
@@ -29,6 +33,7 @@ public:
     Eigen::VectorXd max_val;
     Eigen::MatrixXd axes;
     bool sym_axes;
+    bool trans_modes;
     int min_nonzero;
     int max_nonzero;
 };

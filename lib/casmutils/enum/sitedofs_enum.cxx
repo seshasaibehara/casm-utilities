@@ -63,6 +63,7 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_sitedofs(xtal::St
                                                                 input_options.max_val,
                                                                 input_options.inc_val,
                                                                 input_options.sym_axes,
+                                                                input_options.trans_modes,
                                                                 input_options.min_nonzero,
                                                                 input_options.max_nonzero,
                                                                 filter_expr);

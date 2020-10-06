@@ -26,13 +26,13 @@ TEST_F(StrainTest, enumeration)
     max_val << 0.1, 0.1, 0.1, 0.1, 0.1, 0.1;
     min_val << -0.05, -0.05, -0.05, -0.05, -0.05, -0.05;
 
-    cu::enumerator::StrainEnumOptions input_options(max_val, inc_val);
+    cu::enumerator::StrainEnumOptions input_options(6, max_val, inc_val);
     input_options.min_val = min_val;
-    //    input_options.axes = axes;
-    input_options.sym_axes = true;
+    input_options.axes = axes;
+    // input_options.sym_axes = true;
     std::vector<std::pair<std::string, Structure>> enumerated_structures =
         cu::enumerator::enumerate_strain(bcc_struc, input_options);
-    EXPECT_EQ(enumerated_structures.size(), 189);
+    EXPECT_EQ(enumerated_structures.size(), 196);
 }
 
 int main(int argc, char** argv)
