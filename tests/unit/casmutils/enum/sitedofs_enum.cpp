@@ -47,7 +47,7 @@ protected:
 TEST_F(SiteDoFsTest, sym_axes_enumeration)
 {
     inc_val << 0.05, 0.05, 0.05, 0.05, 0.05, 0.05;
-    max_val << 0.1, 0.1, 0.1, 0.1, 0.1, 0.1;
+    max_val << 0.05, 0.05, 0.05, 0.05, 0.05, 0.05;
     Eigen::VectorXd ap(15), aa(15);
     aa << 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05;
     ap << 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05;
@@ -55,11 +55,11 @@ TEST_F(SiteDoFsTest, sym_axes_enumeration)
     Eigen::VectorXd a0(1);
     a0 << 1;
     Eigen::Vector3d a1(0.1, 0.1, 0.1);
-    std::string dof = "Cmagspin";
-    int tot_dim = 2;
-    cu::enumerator::SiteDoFEnumOptions input_options(dof, tot_dim, a0, a0);
-    input_options.sym_axes = true;
-    input_options.trans_modes = false;
+    std::string dof = "disp";
+    int tot_dim = 6;
+    cu::enumerator::SiteDoFEnumOptions input_options(dof, tot_dim, max_val, inc_val);
+    //   input_options.sym_axes = true;
+    //   input_options.trans_modes = false;
     //    input_options.max_nonzero = 3;
     std::vector<std::pair<std::string, Structure>> enumerated_strucs =
         cu::enumerator::enumerate_sitedofs(*bcc_struc_ptr, input_options);

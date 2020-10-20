@@ -55,23 +55,38 @@ std::vector<std::pair<std::string, xtal::Structure>> enumerate_sitedofs(xtal::St
 
     std::vector<std::string> filter_expr;
     CASM::ConfigEnumSiteDoFs enum_configs =
-        CASM::ConfigEnumSiteDoFs::run_without_inserting_configs(primclex,
-                                                                input_config,
-                                                                input_options.dof,
-                                                                input_options.axes.transpose(),
-                                                                input_options.min_val,
-                                                                input_options.max_val,
-                                                                input_options.inc_val,
-                                                                input_options.sym_axes,
-                                                                input_options.trans_modes,
-                                                                input_options.min_nonzero,
-                                                                input_options.max_nonzero,
-                                                                filter_expr);
+        CASM::ConfigEnumSiteDoFs::run_without_insert_configs(primclex,
+                                                             input_config,
+                                                             input_options.dof,
+                                                             input_options.axes.transpose(),
+                                                             input_options.min_val,
+                                                             input_options.max_val,
+                                                             input_options.inc_val,
+                                                             input_options.sym_axes,
+                                                             input_options.trans_modes,
+                                                             input_options.min_nonzero,
+                                                             input_options.max_nonzero,
+                                                             filter_expr);
 
     // Get configurations form enum_configs
     std::vector<CASM::Configuration> configs;
     for (const auto& config : enum_configs)
     {
+        CASM::Configuration pp = config.canonical_form();
+        for (const auto x : pp.configdof().local_dofs())
+        {
+            std::cout << "Canonical" << std::endl;
+            std::cout << x.second.values() << std::endl;
+            std::cout << "-------" << std::endl;
+        }
+
+        for (const auto y : config.configdof().local_dofs())
+        {
+            std::cout << "non canonical" << std::endl;
+            std::cout << y.second.values() << std::endl;
+            std::cout << "---" << std::endl;
+        }
+
         configs.push_back(config);
     }
 
