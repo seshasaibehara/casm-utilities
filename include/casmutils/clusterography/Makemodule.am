@@ -1,4 +1,0 @@
-casmutils_clusterography_includedir=$(includedir)/casmutils/clusterography
-casmutils_clusterography_include_HEADERS=\
-						  include/casmutils/clusterography/cluster_finder.hpp
-

@@ -1,9 +1,11 @@
 TESTS+=check_clusterography_cluster_finder
 check_PROGRAMS += check_clusterography_cluster_finder
 check_clusterography_cluster_finder_SOURCES =\
-										 tests/unit/casmutils/clusterography/cluster_finder.cpp\
-										 tests/autotools.hh
+										 $(srcdir)/plugins/cluster_finder/tests/cluster_finder.cpp\
+										 $(srcdir)/tests/autotools.hh
 check_clusterography_cluster_finder_LDADD=\
 					libgtest.la\
-					libcasmutils.la
+					libcasmutils-clusterography.la\
+					libcasmutils.la\
+					libcasmblob.la
 

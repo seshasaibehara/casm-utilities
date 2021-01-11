@@ -1,5 +1,5 @@
 // These are classes that structure depends on
-#include "../../../autotools.hh"
+#include "../tests/autotools.hh"
 #include <casmutils/clusterography/cluster_finder.hpp>
 #include <casmutils/sym/cartesian.hpp>
 #include <casmutils/xtal/site.hpp>

@@ -1,0 +1,2 @@
+include $(srcdir)/plugins/cluster_finder/include/casmutils/Makemodule.am
+

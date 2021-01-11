@@ -23,9 +23,3 @@ libcasmutils_la_LIBADD+=\
 					   libcasmutils-mapping.la\
 					   libcasmutils-mush.la\
 					   libcasmutils-xtal.la
-
-if FULL_CASM
-include lib/casmutils/clusterography/Makemodule.am
-libcasmutils_la_LIBADD+=\
-						libcasmutils-clusterography.la
-endif
