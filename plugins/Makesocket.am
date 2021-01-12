@@ -1,1 +1,2 @@
-include $(srcdir)/plugins/cluster_finder/Makesocket.am
+
+include plugins/cluster_finder/Makesocket.am
