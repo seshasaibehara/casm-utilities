@@ -1,2 +1,0 @@
-
-include plugins/cluster_finder/Makesocket.am
