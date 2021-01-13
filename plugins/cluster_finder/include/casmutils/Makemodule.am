@@ -1,1 +1,1 @@
-include $(srcdir)/plugins/cluster_finder/include/casmutils/clusterography/Makemodule.am
+include plugins/cluster_finder/include/casmutils/clusterography/Makemodule.am

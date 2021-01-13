@@ -1,4 +1,4 @@
-casmutils_clusterography_includedir=$(srcdir)/plugins/cluster_finder/casmutils/clusterography
+casmutils_clusterography_includedir=plugins/cluster_finder/casmutils/clusterography
 casmutils_clusterography_include_HEADERS=\
-						  $(srcdir)/plugins/cluster_finder/include/casmutils/clusterography/cluster_finder.hpp
+						  plugins/cluster_finder/include/casmutils/clusterography/cluster_finder.hpp
 
