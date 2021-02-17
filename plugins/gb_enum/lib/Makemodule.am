@@ -1,0 +1,7 @@
+noinst_LTLIBRARIES += libgbenum.la
+
+AM_CPPFLAGS+=-I$(srcdir)/plugins/gb_enum/lib
+
+libgbenum_la_SOURCES=\
+					  plugins/gb_enum/lib/twist3d.cxx\
+					  plugins/gb_enum/lib/twist3d.hpp

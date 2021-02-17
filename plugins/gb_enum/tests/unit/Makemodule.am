@@ -1,0 +1,9 @@
+TESTS+=check_gb_enum_twist3d
+check_PROGRAMS += check_gb_enum_twist3d
+check_gb_enum_twist3d_SOURCES = \
+								plugins/gb_enum/tests/unit/twist3d.cpp
+check_gb_enum_twist3d_LDADD = \
+							  libgtest.la\
+							  libcasmutils.la\
+							  libgbenum.la
+
