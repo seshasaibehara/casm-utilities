@@ -1,0 +1,2 @@
+include plugins/gb_enum/lib/Makemodule.am
+include plugins/gb_enum/tests/Makemodule.am
