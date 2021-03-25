@@ -110,62 +110,35 @@ protected:
     double tol = 1e-5;
 };
 
-TEST_F(SymmetryPreservingMappingTest, PreservingTest)
+TEST_F(SymmetryPreservingMappingTest, SymmetryPreservingTest)
 {
-    cu::mapping::MappingReport full_report = cu::mapping::map_structure(*tall_hcp_ptr, *squished_hcp_ptr)[0];
-    auto hcp_group = cu::xtal::make_factor_group(*tall_hcp_ptr, tol);
-    // construct the corresponding permutation representation
-    cu::sym::PermRep no_swap = {0, 1};
-    cu::sym::PermRep swap = {1, 0};
-    std::vector<cu::sym::PermRep> perm_group;
-    for (const auto op : hcp_group)
-    {
-        bool op_swaps = false;
-        if (op_swaps)
-        {
-            perm_group.push_back(swap);
-        }
-        else
-        {
-            perm_group.push_back(no_swap);
-        }
-    }
-    cu::mapping::MappingReport adjusted_report =
-        cu::mapping::symmetry_preserving_mapping_report(full_report, hcp_group, perm_group);
-    // because only difference is c/a ratio the mapping report should be entirely symmetry preserving
-    EXPECT_TRUE(cu::almost_equal(full_report.displacement, adjusted_report.displacement, 1e-5));
-    EXPECT_TRUE(cu::almost_equal(full_report.stretch, adjusted_report.stretch, 1e-5));
+    cu::mapping::MappingInput mapping_input;
+    mapping_input.symmetrize_cost = true;
+    cu::mapping::StructureMapper_f tall_hcp_mapper(*tall_hcp_ptr, mapping_input);
+    cu::mapping::MappingReport full_report = tall_hcp_mapper(*squished_hcp_ptr)[0];
+
+    /// The lattice and basis score should be entirely symmetry preserving
+    EXPECT_TRUE(cu::almost_equal(full_report.lattice_cost, 0.0, 1e-5));
+    EXPECT_TRUE(cu::almost_equal(full_report.basis_cost, 0.0, 1e-5));
 }
 
 TEST_F(SymmetryPreservingMappingTest, NotPreservingTest)
 {
-    cu::mapping::MappingReport full_report =
-        cu::mapping::map_structure(*conventional_fcc_Ni_ptr, *partial_bain_Ni_ptr)[0];
-    auto fcc_group = cu::xtal::make_factor_group(*conventional_fcc_Ni_ptr, tol);
-    // construct the corresponding permutation representation
-    cu::sym::PermRep no_swap = {0, 1, 2, 3};
-    cu::sym::PermRep swap = {3, 2, 1, 0};
-    std::vector<cu::sym::PermRep> perm_group;
-    for (const auto op : fcc_group)
-    {
-        bool op_swaps = false;
-        if (op_swaps)
-        {
-            perm_group.push_back(swap);
-        }
-        else
-        {
-            perm_group.push_back(no_swap);
-        }
-    }
-    cu::mapping::MappingReport adjusted_report =
-        cu::mapping::symmetry_preserving_mapping_report(full_report, fcc_group, perm_group);
-    double volume_factor = ((conventional_fcc_Ni_ptr->lattice().volume()) / partial_bain_Ni_ptr->lattice().volume());
-    double scale_factor = (volume_factor - 1.0) / 3 + 1;
+    cu::mapping::MappingInput mapping_input0;
+    cu::mapping::MappingInput mapping_input1;
+    mapping_input1.symmetrize_cost = true;
+    mapping_input0.use_crystal_symmetry = true;
+    mapping_input1.use_crystal_symmetry = true;
+
+    cu::mapping::StructureMapper_f con_fcc_mapper(*conventional_fcc_Ni_ptr, mapping_input0);
+    cu::mapping::StructureMapper_f con_fcc_sym_break_mapper(*conventional_fcc_Ni_ptr, mapping_input1);
+
+    cu::mapping::MappingReport sym_report = con_fcc_mapper(*partial_bain_Ni_ptr)[0];
+    cu::mapping::MappingReport sym_breaking_report = con_fcc_sym_break_mapper(*partial_bain_Ni_ptr)[0];
+
     // because only difference is partial bain ratio the mapping report should be entirely symmetry breaking
-    EXPECT_TRUE(cu::almost_equal(full_report.displacement, adjusted_report.displacement, 1e-5));
-    Eigen::Matrix3d ident = Eigen::Matrix3d::Identity() * scale_factor;
-    EXPECT_TRUE(cu::almost_equal(ident, adjusted_report.stretch, 1e-5));
+    EXPECT_TRUE(cu::almost_equal(sym_report.stretch, sym_breaking_report.stretch, 1e-5));
+    EXPECT_TRUE(cu::almost_equal(sym_report.displacement, sym_breaking_report.displacement, 1e-5));
 }
 //**********************************************************************************************
 

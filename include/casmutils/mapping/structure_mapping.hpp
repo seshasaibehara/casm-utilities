@@ -85,7 +85,8 @@ public:
           assume_ideal_lattice(false),
           assume_ideal_structure(false),
           /* assume_deformed_structure(false), */
-          use_crystal_symmetry(false)
+          use_crystal_symmetry(false),
+          symmetrize_cost(false)
     {
     }
 
@@ -119,6 +120,9 @@ public:
     /// When true, the factor group of the reference structure is applied to the mapped structure
     /// when performing the mapping
     bool use_crystal_symmetry;
+
+    /// When true, the output of the mapping algorithm returns symmetry breaking lattice and atomic costs
+    bool symmetrize_cost;
 
 private:
     // TODO: This might eventually collapse into ATOM mode only, so it's disabled for now
@@ -177,13 +181,6 @@ std::pair<double, double> structure_score(const mapping::MappingReport& mapping_
 /// Map a single structure onto a reference structure with default settings
 std::vector<mapping::MappingReport> map_structure(const xtal::Structure& map_reference_struc,
                                                   const xtal::Structure& mappable_struc);
-
-/// Calculates the symmetry preserving part of the MappingReport according to the given factor group
-/// This is the part of the distortion that has the same symmetry as the given factor group.
-/// Therefore, applying this distortion to the ideal crystal does not change its symmetry.
-mapping::MappingReport symmetry_preserving_mapping_report(const mapping::MappingReport& mapping_data,
-                                                          const std::vector<sym::CartOp>& group_as_operations,
-                                                          const std::vector<sym::PermRep>& group_as_permutations);
 
 } // namespace mapping
 } // namespace casmutils

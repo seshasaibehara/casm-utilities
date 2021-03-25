@@ -10,36 +10,6 @@ namespace casmutils
 namespace mapping
 {
 
-namespace
-{
-double atomic_cost_child(const MappingReport& mapped_result, int Nsites)
-{
-    Nsites = std::max(Nsites, int(1));
-    double atomic_vol = mapped_result.reference_lattice.volume() / double(Nsites) / mapped_result.stretch.determinant();
-    return pow(3. * abs(atomic_vol) / (4. * M_PI), -2. / 3.) *
-           (mapped_result.stretch.inverse() * mapped_result.displacement).squaredNorm() / double(Nsites);
-}
-//*******************************************************************************************
-
-double atomic_cost_parent(const MappingReport& mapped_result, int Nsites)
-{
-    Nsites = std::max(Nsites, int(1));
-    // mean square displacement distance in deformed coordinate system
-    double atomic_vol = mapped_result.reference_lattice.volume() / double(Nsites);
-    return pow(3. * abs(atomic_vol) / (4. * M_PI), -2. / 3.) * (mapped_result.displacement).squaredNorm() /
-           double(Nsites);
-}
-
-//*******************************************************************************************
-
-double atomic_cost(const MappingReport& mapped_result, int Nsites)
-{
-    // mean square displacement distance in deformed coordinate system
-    return (atomic_cost_child(mapped_result, Nsites) + atomic_cost_parent(mapped_result, Nsites)) / 2.;
-}
-
-} // namespace
-
 std::vector<sym::CartOp> StructureMapper_f::make_default_factor_group() const
 {
     if (this->settings.use_crystal_symmetry)
@@ -86,6 +56,11 @@ StructureMapper_f::StructureMapper_f(const xtal::Structure& reference,
     // its individual values and do some layered inline construction
     //
     // explain more pls. what is "layered inline construction"?
+    mapper.set_symmetrize_atomic_cost(settings.symmetrize_cost,
+                                      factor_group,
+                                      CASM::xtal::make_permutation_representation(
+                                          reference_structure.__get<CASM::xtal::BasicStructure>(), factor_group));
+    mapper.set_symmetrize_lattice_cost(settings.symmetrize_cost);
 }
 
 std::vector<MappingReport> StructureMapper_f::operator()(const xtal::Structure& mappable_struc) const
@@ -134,41 +109,9 @@ std::vector<mapping::MappingReport> map_structure(const xtal::Structure& map_ref
 
 std::pair<double, double> structure_score(const mapping::MappingReport& mapping_data)
 {
-    double lattice_score = CASM::xtal::StrainCostCalculator::isotropic_strain_cost(mapping_data.stretch);
-    double basis_score = atomic_cost(mapping_data, std::max(int(mapping_data.permutation.size()), 1));
+    double lattice_score = mapping_data.lattice_cost;
+    double basis_score = mapping_data.basis_cost;
     return std::make_pair(lattice_score, basis_score);
-}
-
-mapping::MappingReport symmetry_preserving_mapping_report(const mapping::MappingReport& mapping_data,
-                                                          const std::vector<sym::CartOp>& group_as_operations,
-                                                          const std::vector<sym::PermRep>& group_as_permutations)
-{
-
-    const auto disp_matrix = mapping_data.displacement;
-    auto symmetry_preserving_displacement = disp_matrix;
-    auto symmetry_preserving_stretch = mapping_data.stretch;
-    symmetry_preserving_displacement.setZero();
-    symmetry_preserving_stretch.setZero();
-    for (int i = 0; i < group_as_operations.size(); ++i)
-    {
-        auto transformed_disp = group_as_operations[i].matrix * disp_matrix;
-        Eigen::MatrixXd transformed_and_permuted_disp = transformed_disp;
-        transformed_and_permuted_disp.setZero();
-        int ind = 0;
-        for (const auto& j : group_as_permutations[i])
-        {
-            transformed_and_permuted_disp.col(j) += transformed_disp.col(ind);
-            ind++;
-        }
-        symmetry_preserving_displacement += transformed_and_permuted_disp / group_as_operations.size();
-        Eigen::MatrixXd transformed_stretch =
-            group_as_operations[i].matrix.transpose() * mapping_data.stretch * group_as_operations[i].matrix;
-        symmetry_preserving_stretch += transformed_stretch / group_as_operations.size();
-    }
-    auto new_report = mapping_data;
-    new_report.stretch = symmetry_preserving_stretch;
-    new_report.displacement = symmetry_preserving_displacement;
-    return new_report;
 }
 } // namespace mapping
 } // namespace casmutils
