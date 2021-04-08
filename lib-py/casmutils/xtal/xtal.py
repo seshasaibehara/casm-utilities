@@ -11,6 +11,7 @@ from .globaldef import *
 from ._xtal import make_niggli as _make_niggli
 from ._xtal import make_superstructure as _make_superstructure
 from ._xtal import make_primitive as _make_primitive
+from ._xtal import _deformation_tensor_to_metric
 
 # from .single_block_wadsley_roth import *
 
@@ -57,5 +58,27 @@ def make_primitive(structure):
     """
     return Structure._from_pybind(_make_primitive(structure._pybind_value))
 
+
+def deformation_tensor_to_metric(metric, deformation_tensor):
+    """Converts the given deformation tensor to a strain metric of your choice
+
+    Parameters
+    ----------
+    metric : string
+        Allowed metric values are 'GL' (Green-Lagrange), 'B' (BIOT), 'H'(HENCKY) and 'EA' (Euler-Almansi).
+        Metric values can either be capital letters or small letters. Only the first letter in the provided metric 
+        string is considered to compare it with the allowed values. For example, you can provide 'gree' as the string 
+        and it selects Green-Lagrange
+
+    deformation_tensor : np.array(float32[3,3])
+        Deformation tensor that needs to be converted to a metric tensor of your choice
+    
+    Returns
+    -------
+    np.array(float32[3,3])
+        Correspoding metric tensor
+
+    """
+    return _deformation_tensor_to_metric(metric, deformation_tensor)
 
 Coordinate.extra_function = extra_function
