@@ -103,6 +103,12 @@ class SiteTest(unittest.TestCase):
         self.site2m.set_compare_method(SiteCoordinateEquals, self.tol)
         self.assertTrue(self.site2m == self.site0m)
 
+    def test_site_periodic_equals(self):
+        site0 = cu.xtal.Site(np.array([0.25, 0.25, 0]), "Ni")
+        site1 = cu.xtal.Site(np.array([1.249999, 1.25000001, 0.000001]), "Ni")
+        site0.set_compare_method(cu.xtal.SitePeriodicEquals, self.lat, 1e-5)
+        self.assertTrue(site0 == site1)
+
 
 if __name__ == '__main__':
     unittest.main()

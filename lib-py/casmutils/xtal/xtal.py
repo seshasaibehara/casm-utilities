@@ -1,8 +1,7 @@
 from __future__ import absolute_import
 
 from . import coordinate
-from .coordinate import Coordinate
-from .coordinate import MutableCoordinate
+from .coordinate import *
 from .lattice import *
 from .site import *
 from .structure import *

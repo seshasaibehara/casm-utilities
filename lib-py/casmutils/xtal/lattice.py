@@ -173,17 +173,6 @@ class Lattice(_xtal.Lattice):
         """
         return not self == other
 
-    def __str__(self):
-        """Returns column vector matrix as a printable
-        string
-
-        Returns
-        -------
-        string
-
-        """
-        return self.__str__()
-
     @classmethod
     def from_lattice_parameters(cls, a, b, c, alpha, beta, gamma):
         """Constructs lattice from lattice parameters. Since 

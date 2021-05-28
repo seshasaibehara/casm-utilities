@@ -94,17 +94,6 @@ class _Structure():
 
         return basis
 
-    def __str__(self):
-        """Returns lattice and the list of basis sites as
-        a printable string
-
-        Returns
-        -------
-        string
-
-        """
-        return self._pybind_value.__str__()
-
 
 class Structure(_Structure):
     """Immutable structure defined by a Lattice and a list of basis sites.

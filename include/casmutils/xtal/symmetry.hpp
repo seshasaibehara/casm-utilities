@@ -34,13 +34,12 @@ Lattice symmetrize(const Lattice& noisy_lattice, const std::vector<sym::CartOp>&
 Structure symmetrize(const Structure& noisy_structure, const std::vector<sym::CartOp>& enforced_factor_group);
 
 /// Apply SymOp to Eigen::Vector3d
+/// It DOESN'T bring within the lattice. It just applies SymOp. You need to manually do bring within.
 Eigen::Vector3d operator*(const sym::CartOp& sym_op, const Eigen::Vector3d& vector3d);
 
 /// Apply SymOp to Site
+/// It DOESN'T bring within the lattice. It just applies SymOp. You need to manually do bring within.
 Site operator*(const sym::CartOp& sym_op, const Site& site);
-
-/// Apply SymOp to Coordinate
-Coordinate operator*(const sym::CartOp& sym_op, const Coordinate& coordinate);
 
 } // namespace xtal
 } // namespace casmutils

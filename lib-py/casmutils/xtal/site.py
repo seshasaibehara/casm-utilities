@@ -34,6 +34,39 @@ class Equals:
                                   other._pybind_value)
 
 
+class SitePeriodicEquals:
+    """Definition of a site compare method which returns true if
+    the coordinate of the "reference" site *periodically* matches with
+    the coordinate of the "other" site and the atom types of both sites
+    are the same"""
+    def __init__(self, ref, lat, tol):
+        """Construct SitePeriodicEquals from Site or MutableSite,
+        Lattice of the given structure and a tolerance
+
+        Paremeters
+        ----------
+        ref : cu.xtal.Site or cu.xtal.MutableSite
+        lat : cu.xtal.Lattice
+        tol : double
+
+        """
+        self.ref = ref
+        self._SitePeriodicEquals_f = _xtal.SitePeriodicEquals_f(lat, tol)
+
+    def __call__(self, other):
+        """
+        Parameters
+        ----------
+        other : cu.xtal.Site or cu.xtal.MutableSite
+
+        Returns
+        -------
+        bool    
+        """
+        return self._SitePeriodicEquals_f(self.ref._pybind_value,
+                                          other._pybind_value)
+
+
 class _Site:
     """Base class for both mutable and immutable Site classes.
     Defines the functions that should be common to both"""

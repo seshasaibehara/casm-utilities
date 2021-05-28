@@ -36,6 +36,38 @@ class Equals:
                                         other.cart())
 
 
+class CoordinatePeriodicEquals:
+    """A coordinate compare method which returns true if each of x, y, z values
+    of the "reference" coordinate are *periodically* within a specified tolerance
+    of x, y, z values of the "other" Coordinate"""
+    def __init__(self, ref, lat, tol):
+        """Construct from Coordinate or MutableCoordinate, lattice & a given tolearance
+
+        Parameters
+        ----------
+        ref : cu.xtal.Coordinate or cu.xtal.MutableCoordinate
+        lat : cu.xtal.Lattice
+        tol : double
+        
+        """
+        self.ref = ref
+        self._CoordinatePeriodicEquals_f = _xtal.CoordinatePeriodicEquals_f(
+            lat, tol)
+
+    def __call__(self, other):
+        """
+        Parameters
+        ----------
+        other : cu.xtal.Coordinate or cu.xtal.MutableCoordinate
+
+        Returns
+        -------
+        bool
+
+        """
+        return self._CoordinatePeriodicEquals_f(self.ref.cart(), other.cart())
+
+
 class _Coordinate:
     """Base class for both mutable and immutable Coordinate classes.
     Defines the functions that should be common for both."""

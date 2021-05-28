@@ -51,6 +51,20 @@ public:
 private:
     double tol;
 };
+
+/// This functor class provides a binary periodic equals operator
+/// for casmutils::xtal::Site
+class SitePeriodicEquals_f
+{
+public:
+    SitePeriodicEquals_f(const Lattice& lat, double tol);
+    bool operator()(const Site& ref, const Site& other) const;
+
+private:
+    std::unique_ptr<Lattice> lat_ptr;
+    double tol;
+};
+
 } // namespace xtal
 } // namespace casmutils
 

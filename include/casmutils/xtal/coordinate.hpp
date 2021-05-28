@@ -35,6 +35,19 @@ private:
     double tol;
 };
 
+/// A functor which *periodically* compares coordinates
+/// Returns true if the other coordinate is only a lattice translation away from the reference coordinate
+struct CoordinatePeriodicEquals_f
+{
+public:
+    CoordinatePeriodicEquals_f(const Lattice& lat, double tol);
+    bool operator()(const Eigen::Vector3d& ref, const Eigen::Vector3d& other) const;
+
+private:
+    double tol;
+    std::unique_ptr<Lattice> lat_ptr;
+};
+
 } // namespace xtal
 } // namespace casmutils
 

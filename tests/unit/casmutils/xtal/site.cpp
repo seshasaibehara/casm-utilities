@@ -22,6 +22,7 @@ protected:
     }
     using Lattice = casmutils::xtal::Lattice;
     using Site = casmutils::xtal::Site;
+    using SitePeriodicEquals_f = casmutils::xtal::SitePeriodicEquals_f;
 
     // Use unique pointers because Site has no default constructor
     std::unique_ptr<Site> lithium_site_ptr;
@@ -59,6 +60,14 @@ TEST_F(SiteTest, SiteEquals)
     EXPECT_TRUE(unary_site_comparator(*lithium_site_ptr));
     EXPECT_FALSE(unary_site_comparator(*nickel_site_ptr));
 };
+
+TEST_F(SiteTest, SitePeriodicEquals_f)
+{
+    double tol = 1e-5;
+    Site s0(Eigen::Vector3d(0, 0, 0), "Li");
+    Site s1(Eigen::Vector3d(1.000001, 0.00001, 0.000001), "Li");
+    EXPECT_TRUE(casmutils::is_equal<SitePeriodicEquals_f>(s0, s1, Lattice(Eigen::Matrix3d::Identity()), tol));
+}
 
 int main(int argc, char** argv)
 {

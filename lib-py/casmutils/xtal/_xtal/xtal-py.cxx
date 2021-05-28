@@ -79,6 +79,12 @@ PYBIND11_MODULE(_xtal, m)
     }
 
     {
+        class_<xtal::CoordinatePeriodicEquals_f>(m, "CoordinatePeriodicEquals_f")
+            .def(init<const casmutils::xtal::Lattice&, double>())
+            .def("__call__", &xtal::CoordinatePeriodicEquals_f::operator());
+    }
+
+    {
         using namespace wrappy::Site;
         class_<xtal::Site>(m, "Site")
             .def(init<const Eigen::Vector3d&, const std::string&>())
@@ -95,6 +101,12 @@ PYBIND11_MODULE(_xtal, m)
         class_<xtal::SiteEquals_f>(m, "SiteEquals_f")
             .def(init<double>())
             .def("__call__", &xtal::SiteEquals_f::operator());
+    }
+
+    {
+        class_<xtal::SitePeriodicEquals_f>(m, "SitePeriodicEquals_f")
+            .def(init<const casmutils::xtal::Lattice&, double>())
+            .def("__call__", &xtal::SitePeriodicEquals_f::operator());
     }
 
     {

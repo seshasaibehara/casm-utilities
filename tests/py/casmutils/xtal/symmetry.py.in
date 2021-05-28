@@ -31,6 +31,15 @@ class SymmetryGroupsTest(unittest.TestCase):
         fg = cu.xtal.symmetry.make_factor_group(self.prim_fcc_ni, self.tol)
         self.assertEqual(len(fg), 48)
 
+    def test_make_perm_rep_factor_group(self):
+        con_fcc_path = os.path.join(input_file_dir, "conventional_fcc_Ni.vasp")
+        con_fcc = cu.xtal.Structure.from_poscar(con_fcc_path)
+        pfg = cu.xtal.symmetry.make_permutation_representation_factor_group(
+            con_fcc, self.tol)
+        self.assertEqual(len(pfg), 192)
+        for x in pfg:
+            print(x)
+
 
 class SymmetrizeTest(unittest.TestCase):
     def setUp(self):

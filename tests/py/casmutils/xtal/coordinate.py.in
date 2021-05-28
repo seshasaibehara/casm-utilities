@@ -97,6 +97,13 @@ class CoordinateTest(unittest.TestCase):
             new_coord, self.lat)
         self.assertTrue(np.allclose(self.raw_coord0, new_within))
 
+    def test_periodic_coord_compare(self):
+        coord0 = cu.xtal.Coordinate(np.array([0.25, 0.25, 0]))
+        coord1 = cu.xtal.Coordinate(np.array([1.2500001, 1.25, 0]))
+        coord0.set_compare_method(cu.xtal.CoordinatePeriodicEquals, self.lat,
+                                  1e-5)
+        self.assertTrue(coord0 == coord1)
+
 
 if __name__ == '__main__':
     unittest.main()

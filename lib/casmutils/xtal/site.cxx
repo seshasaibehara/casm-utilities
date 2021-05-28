@@ -42,5 +42,15 @@ bool SiteEquals_f::operator()(const Site& ref_site, const Site& other) const
     return is_equal<CoordinateEquals_f>(ref_site.cart(), other.cart(), tol) && ref_site.label() == other.label();
 }
 
+SitePeriodicEquals_f::SitePeriodicEquals_f(const Lattice& lat, double tol) : tol(tol)
+{
+    lat_ptr.reset(new Lattice(lat));
+}
+bool SitePeriodicEquals_f::operator()(const Site& ref, const Site& other) const
+{
+    return is_equal<CoordinatePeriodicEquals_f>(ref.cart(), other.cart(), *lat_ptr, tol) &&
+           ref.label() == other.label();
+}
+
 } // namespace xtal
 } // namespace casmutils

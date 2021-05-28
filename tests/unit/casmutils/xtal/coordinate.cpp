@@ -10,6 +10,7 @@ class CoordinateTest : public testing::Test
 protected:
     using Lattice = casmutils::xtal::Lattice;
     using CoordinateEquals_f = casmutils::xtal::CoordinateEquals_f;
+    using CoordinatePeriodicEquals_f = casmutils::xtal::CoordinatePeriodicEquals_f;
     // Use unique pointers because Coordinate has no default constructor
     Eigen::Vector3d coord0;
     std::unique_ptr<Lattice> fcc_lattice_ptr;
@@ -79,11 +80,24 @@ TEST_F(CoordinateTest, WignerSeitzWithin)
 
 TEST_F(CoordinateTest, CoordinateEquals)
 {
-    CoordinateEquals_f coord0_equals(tol);
-    EXPECT_TRUE(coord0_equals(coord0, coord0));
+    CoordinateEquals_f coord_equals(tol);
+    EXPECT_TRUE(coord_equals(coord0, coord0));
+
+    Eigen::Vector3d c0(0, 0, 0);
+    Eigen::Vector3d c1(0.0000001, 0.0000001, 0.000001);
+    EXPECT_TRUE(coord_equals(c0, c1));
 
     casmutils::UnaryComparator_f<CoordinateEquals_f> unary_coord_compare(coord0, tol);
     EXPECT_TRUE(unary_coord_compare(coord0));
+}
+
+TEST_F(CoordinateTest, CoordinatePeriodicEquals)
+{
+    Eigen::Vector3d c0(0.25, 0.25, 0);
+    Eigen::Vector3d c1(1.25, 1.25, 0);
+
+    CoordinatePeriodicEquals_f coord_equals(*fcc_lattice_ptr, tol);
+    EXPECT_TRUE(coord_equals(c0, c1));
 }
 
 //

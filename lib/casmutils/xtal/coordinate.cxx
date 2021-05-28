@@ -34,7 +34,23 @@ Eigen::Vector3d bring_within_wigner_seitz(const Eigen::Vector3d& cartesian_coord
 CoordinateEquals_f::CoordinateEquals_f(double tol) : tol(tol) {}
 bool CoordinateEquals_f::operator()(const Eigen::Vector3d& ref, const Eigen::Vector3d& other) const
 {
-    return ref.isApprox(other, tol);
+    // Difference is calculated because there is an issue with Eigen::isApprox when you are
+    // using it to compare a zero vector
+    auto difference = ref - other;
+    return difference.isZero(tol);
+}
+
+CoordinatePeriodicEquals_f::CoordinatePeriodicEquals_f(const Lattice& lat, double tol) : tol(tol)
+{
+    lat_ptr.reset(new Lattice(lat));
+}
+
+bool CoordinatePeriodicEquals_f::operator()(const Eigen::Vector3d& ref, const Eigen::Vector3d& other) const
+{
+    auto ref_bring_within = bring_within_lattice(ref, *lat_ptr);
+    auto other_bring_within = bring_within_lattice(other, *lat_ptr);
+    auto difference = ref_bring_within - other_bring_within;
+    return difference.isZero(tol);
 }
 
 } // namespace xtal
