@@ -174,5 +174,29 @@ Structure slice_along_plane(const Structure& unit_structure, const Eigen::Vector
     sliced_structure.within();
     return sliced_structure;
 }
+
+Eigen::Matrix3d deformation_tensor_to_metric(const std::string& metric, const Eigen::Matrix3d& deformation_tensor)
+{
+    char m = std::tolower(metric[0]);
+
+    switch (m)
+    {
+    case 'g':
+        return CASM::strain::deformation_tensor_to_metric<CASM::strain::METRIC::GREEN_LAGRANGE>(deformation_tensor);
+
+    case 'b':
+        return CASM::strain::deformation_tensor_to_metric<CASM::strain::METRIC::BIOT>(deformation_tensor);
+
+    case 'h':
+        return CASM::strain::deformation_tensor_to_metric<CASM::strain::METRIC::HENCKY>(deformation_tensor);
+
+    case 'e':
+        return CASM::strain::deformation_tensor_to_metric<CASM::strain::METRIC::EULER_ALMANSI>(deformation_tensor);
+
+    default:
+        throw std::runtime_error("Strain Metric provided is not allowed");
+    }
+}
+
 } // namespace xtal
 } // namespace casmutils

@@ -144,6 +144,7 @@ PYBIND11_MODULE(_xtal, m)
     m.def("make_factor_group", casmutils::xtal::make_factor_group);
 	m.def("_symmetrize_lattice",(xtal::Lattice(*)(const xtal::Lattice&, const std::vector<sym::CartOp>&))casmutils::xtal::symmetrize);
 	m.def("_symmetrize_structure",(xtal::Structure(*)(const xtal::Structure&, const std::vector<sym::CartOp>&))casmutils::xtal::symmetrize);
+    m.def("_deformation_tensor_to_metric", casmutils::xtal::deformation_tensor_to_metric);
     // clang-format on
 }
 } // namespace wrappy

@@ -59,6 +59,15 @@ Structure apply_strain(const Structure& struc_ptr, const Eigen::VectorXd& unroll
 /// Given a structure, find all the superstructures between volumes min_vol and max_vol
 std::vector<Structure> make_superstructures_of_volume(const Structure& structure, const int volume);
 
+/// @brief Convert a given deformation tensor to a metric tensor of choice
+/// @param[in] metric Allowed metric values are 'GL' (Green-Lagrange), 'B' (BIOT), 'H'(HENCKY) and 'EA' (Euler-Almansi).
+/// Metric values can either be capital letters or small letters. Only the first letter in the provided metric string is
+/// considered to compare it with the allowed values. For example, you can provide 'gree' as the string and it selects
+/// Green-Lagrange
+/// @param[in] deformation_tensor Deformation tensor that needs to be converted to a metric tensor of your choice
+/// @return Corresponding Metric Tensor
+Eigen::Matrix3d deformation_tensor_to_metric(const std::string& metric, const Eigen::Matrix3d& deformation_tensor);
+
 } // namespace xtal
 } // namespace casmutils
 
